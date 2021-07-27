@@ -1,16 +1,15 @@
 package by.logoped.logopedservice.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.GenerationType.IDENTITY;
 
+@Schema(name = "Role(Unuseful in Controller)")
 @Entity
 @Data
 @NoArgsConstructor
@@ -18,7 +17,11 @@ import static javax.persistence.GenerationType.AUTO;
 @Table(name = "user_role")
 public class Role {
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = IDENTITY)
+    @Schema(example = "1")
     private Long id;
-    private String name;
+    @Column(name = "role_name", nullable = false)
+    @Schema(example = "ROLE_USER")
+    private String roleName;
 }

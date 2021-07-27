@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Email</title>
+</head>
+<body>
+<p>Hi, <span th:text="${name}">Name</span>. Here is your activation link</p>
+<a th:href="${link}" th><p th:text="${link}">Link</p></a>
+</body>
+</html>
