@@ -59,7 +59,6 @@ public class User implements UserDetails {
     private UserStatus userStatus;
 
     @ManyToMany(fetch = EAGER)
-    @Column(name = "user_role_id", nullable = false)
     private Collection<Role> userRoles = new ArrayList<>();
 
     @Override

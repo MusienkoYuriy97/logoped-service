@@ -1,11 +1,13 @@
 package by.logoped.logopedservice.controller;
 
 import by.logoped.logopedservice.dto.LoginUserRequest;
-import by.logoped.logopedservice.dto.RegistrationRequest;
+import by.logoped.logopedservice.dto.RegistrationLogopedRequest;
+import by.logoped.logopedservice.dto.RegistrationUserRequest;
 import by.logoped.logopedservice.dto.RegistrationResponse;
 import by.logoped.logopedservice.service.AuthService;
 import by.logoped.logopedservice.swagger.ApiPostLogin;
-import by.logoped.logopedservice.swagger.ApiPostRegistration;
+import by.logoped.logopedservice.swagger.ApiPostLogopedRegistration;
+import by.logoped.logopedservice.swagger.ApiPostUserRegistration;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,23 +29,23 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/registration/logoped")
-    @ApiPostRegistration
-    public ResponseEntity<?> logopedRegistration(@Valid @RequestBody RegistrationRequest registrationRequest){
-        RegistrationResponse registrationResponse = authService.saveLogoped(registrationRequest);
-        return new ResponseEntity<>(registrationResponse, HttpStatus.CREATED);
+    @ApiPostLogopedRegistration
+    public ResponseEntity<?> logopedRegistration(@Valid @RequestBody RegistrationLogopedRequest request){
+        RegistrationResponse response = authService.saveLogoped(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/registration/user")
-    @ApiPostRegistration
-    public ResponseEntity<?> userRegistration(@Valid @RequestBody RegistrationRequest registrationRequest){
-        RegistrationResponse registrationResponse = authService.saveUser(registrationRequest);
-        return new ResponseEntity<>(registrationResponse, HttpStatus.CREATED);
+    @ApiPostUserRegistration
+    public ResponseEntity<?> userRegistration(@Valid @RequestBody RegistrationUserRequest request){
+        RegistrationResponse response = authService.saveUser(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     @ApiPostLogin
-    public ResponseEntity<?> login(@RequestBody LoginUserRequest loginUserRequest){
-        return new ResponseEntity<>(authService.login(loginUserRequest),
+    public ResponseEntity<?> login(@RequestBody LoginUserRequest request){
+        return new ResponseEntity<>(authService.login(request),
                 HttpStatus.OK);
     }
 
