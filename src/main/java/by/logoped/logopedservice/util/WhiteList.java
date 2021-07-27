@@ -13,7 +13,7 @@ public class WhiteList{
             "/configuration/ui",
             "/swagger-ui/**",
             apiPath + "/auth/login",
-            apiPath + "/auth/logoped/activate/**",
+            apiPath + "/logoped/activate/**",
             apiPath + "/auth/registration/**",
             apiPath + "/token/refresh/**"
     );

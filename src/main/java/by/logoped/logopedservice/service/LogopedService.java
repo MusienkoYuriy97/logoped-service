@@ -1,10 +1,15 @@
 package by.logoped.logopedservice.service;
 
+import by.logoped.logopedservice.dto.LogopedInfoResponse;
 import by.logoped.logopedservice.entity.ActivateKey;
+import by.logoped.logopedservice.entity.Logoped;
 import by.logoped.logopedservice.entity.User;
 import by.logoped.logopedservice.exception.ActiveKeyNotValidException;
+import by.logoped.logopedservice.exception.UserDataException;
 import by.logoped.logopedservice.jwt.ActivateKeyJwtProvider;
+import by.logoped.logopedservice.mapper.ObjectMapper;
 import by.logoped.logopedservice.repository.ActivateKeyRepository;
+import by.logoped.logopedservice.repository.LogopedRepository;
 import by.logoped.logopedservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 import static by.logoped.logopedservice.util.UserStatus.ACTIVE;
 
@@ -30,6 +36,8 @@ public class LogopedService {
     private final UserRepository userRepository;
     private final ActivateKeyRepository activateKeyRepository;
     private final ActivateKeyJwtProvider activateKeyJwtProvider;
+    private final LogopedRepository logopedRepository;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public void activate(String jwtActivateKey){
@@ -62,5 +70,17 @@ public class LogopedService {
     private ActivateKey getActivateKeyOrThrowException(String simpleKey) {
         return activateKeyRepository.getBySimpleKey(simpleKey)
                 .orElseThrow(() -> new ActiveKeyNotValidException("Activate key doesn't exist"));
+    }
+
+    public LogopedInfoResponse getById(Long logopedId) {
+        if (logopedId == null){
+            log.error("logoped id shouldn't be null");
+            throw new UserDataException("logoped id shouldn't be null");
+        }
+        Optional<Logoped> optionalLogoped = logopedRepository.findById(logopedId);
+        if (optionalLogoped.isPresent()){
+            return objectMapper.toLogopedResponse(optionalLogoped.get());
+        }
+        throw new UserDataException("Logoped not found");
     }
 }

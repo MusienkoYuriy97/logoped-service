@@ -1,35 +1,35 @@
 package by.logoped.logopedservice.dto;
 
-import by.logoped.logopedservice.util.UserStatus;
+import by.logoped.logopedservice.entity.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @Schema(description = "Response for registration")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistrationResponse {
-    @Schema(example = "Yury")
+public class LogopedInfoResponse {
+    @Schema(example = "Алина")
     private String firstName;
 
-    @Schema(example = "Musienko")
+    @Schema(example = "Сасанович")
     private String lastName;
 
-    @Schema(example = "97musienko@gmail.com")
+    @Schema(example = "sasanovich@gmail.com")
     private String email;
 
-    @Schema(example = "+375298344491")
+    @Schema(example = "+375296213287")
     private String phoneNumber;
 
-    @Schema(example = "ACTIVE")
-    private UserStatus userStatus;
+    @Schema(example = "БГТУ")
+    private String education;
 
-    @Schema(example = "ROLE_USER")
-    private List<String> roles;
+    @Schema(example = "Подготовка к школе")
+    private Set<String> category;
 }

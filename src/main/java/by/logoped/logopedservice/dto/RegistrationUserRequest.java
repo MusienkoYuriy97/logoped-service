@@ -19,7 +19,7 @@ import static by.logoped.logopedservice.dto.ValidationConstant.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistrationRequest {
+public class RegistrationUserRequest {
     @Schema(example = "Yuriy")
     @NotNull @NotBlank
     private String firstName;

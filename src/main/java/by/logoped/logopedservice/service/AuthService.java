@@ -1,17 +1,14 @@
 package by.logoped.logopedservice.service;
 
 import by.logoped.logopedservice.dto.LoginUserRequest;
-import by.logoped.logopedservice.dto.RegistrationRequest;
+import by.logoped.logopedservice.dto.RegistrationLogopedRequest;
+import by.logoped.logopedservice.dto.RegistrationUserRequest;
 import by.logoped.logopedservice.dto.RegistrationResponse;
-import by.logoped.logopedservice.entity.ActivateKey;
-import by.logoped.logopedservice.entity.Role;
-import by.logoped.logopedservice.entity.User;
+import by.logoped.logopedservice.entity.*;
 import by.logoped.logopedservice.exception.UserDataException;
 import by.logoped.logopedservice.jwt.JwtTokenProvider;
-import by.logoped.logopedservice.mapper.UserMapper;
-import by.logoped.logopedservice.repository.ActivateKeyRepository;
-import by.logoped.logopedservice.repository.RoleRepository;
-import by.logoped.logopedservice.repository.UserRepository;
+import by.logoped.logopedservice.mapper.ObjectMapper;
+import by.logoped.logopedservice.repository.*;
 import by.logoped.logopedservice.util.StringGenerator;
 import by.logoped.logopedservice.util.UserStatus;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +32,13 @@ public class AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ActivateKeyRepository activateKeyRepository;
-    private final UserMapper userMapper;
+    private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final EmailService emailService;
+    private final LogopedRepository logopedRepository;
+    private final CategoryRepository categoryRepository;
 
     @Value("${role.logoped}")
     private String roleLogoped;
@@ -47,18 +46,40 @@ public class AuthService {
     private String roleUser;
 
     @Transactional
-    public RegistrationResponse saveUser(RegistrationRequest request) {
+    public RegistrationResponse saveUser(RegistrationUserRequest request) {
         log.info("Saving new user first name:{}; email:{}", request.getFirstName(), request.getEmail());
-        return save(request, roleUser, ACTIVE);
+        return objectMapper.toUserResponse(save(request, roleUser, ACTIVE));
     }
 
     @Transactional
-    public RegistrationResponse saveLogoped(RegistrationRequest request) {
+    public RegistrationResponse saveLogoped(RegistrationLogopedRequest request) {
         log.info("Saving new logoped first name:{}; email:{}", request.getFirstName(), request.getEmail());
-        RegistrationResponse response = save(request, roleLogoped, BLOCKED);
-        String simpleKey = saveActivateKey(response.getEmail());
-        emailService.sendEmail(response.getEmail(), response.getFirstName(), simpleKey);
-        return response;
+        //save as user
+        User user = save(request, roleLogoped, BLOCKED);
+        //save as logoped
+        Logoped logoped = objectMapper.toLogoped(request);
+        logoped.setUser(user);
+        logoped.setCategories(getCategorySetOrThrowException(request.getServices()));
+        logopedRepository.save(logoped);
+
+        //send email
+        String simpleKey = saveActivateKey(user.getEmail());
+        emailService.sendEmail(user.getEmail(), user.getFirstName(), simpleKey);
+        return objectMapper.toUserResponse(user);
+    }
+
+    private Set<Category> getCategorySetOrThrowException(Set<String> requestServiceProvidedSet) {
+        Set<Category> resultSet = new HashSet<>();
+        for (String elm : requestServiceProvidedSet) {
+            Optional<Category> optionalCategory =
+                    categoryRepository.getByCategoryName(elm);
+            if (optionalCategory.isPresent()){
+                resultSet.add(optionalCategory.get());
+            }else {
+                throw new UserDataException("Service provided entered incorrectly");
+            }
+        }
+        return resultSet;
     }
 
     private String saveActivateKey(String email){
@@ -70,7 +91,7 @@ public class AuthService {
         return activateKeyRepository.save(activateKey).getSimpleKey();
     }
 
-    private RegistrationResponse save(RegistrationRequest request, String roleLogoped, UserStatus blocked) {
+    private User save(RegistrationUserRequest request, String roleLogoped, UserStatus blocked) {
         if (userRepository.existsByEmail(request.getEmail())){
             log.error("User with this email:{} already exist", request.getEmail());
             throw new UserDataException("User with this email already exist");
@@ -81,13 +102,13 @@ public class AuthService {
         }
 
         Role logopedRole = getRoleOrThrowException(roleLogoped);
-        User user = userMapper.toUser(request);
+        User user = objectMapper.toUser(request);
         user.setUserRoles(Set.of(logopedRole));
         user.setUserStatus(blocked);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         log.debug("Saved user {}", user);
-        return userMapper.toDto(user);
+        return user;
     }
 
     private Role getRoleOrThrowException(String roleName){

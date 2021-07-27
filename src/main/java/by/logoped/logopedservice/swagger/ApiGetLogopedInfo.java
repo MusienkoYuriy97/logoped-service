@@ -1,5 +1,6 @@
 package by.logoped.logopedservice.swagger;
 
+import by.logoped.logopedservice.dto.LogopedInfoResponse;
 import by.logoped.logopedservice.dto.RegistrationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,11 +16,11 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Operation(summary = "Registration new user")
+@Operation(summary = "Activate account")
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "CREATED", content = @Content(mediaType = "application/json",schema = @Schema(implementation = RegistrationResponse.class))),
+        @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(implementation = LogopedInfoResponse.class))),
         @ApiResponse(responseCode = "400", description = "Fields entered incorrectly", content = @Content),
-        @ApiResponse(responseCode = "409", description = "Email is being used by another user/Phone number is being used by another user", content = @Content)})
-@SecurityRequirements
-public @interface ApiPostRegistration {
+        @ApiResponse(responseCode = "404", description = "Logoped not found", content = @Content),
+        @ApiResponse(responseCode = "403", description = "Unauthorized", content = @Content)})
+public @interface ApiGetLogopedInfo {
 }

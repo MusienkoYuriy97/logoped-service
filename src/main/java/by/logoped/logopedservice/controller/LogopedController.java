@@ -1,8 +1,8 @@
 package by.logoped.logopedservice.controller;
 
-
 import by.logoped.logopedservice.service.LogopedService;
 import by.logoped.logopedservice.swagger.ApiGetActivate;
+import by.logoped.logopedservice.swagger.ApiGetLogopedInfo;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "${api.path}"+"/auth")
+@RequestMapping(value = "${api.path}"+"/logoped")
 @RequiredArgsConstructor
 @Tag(name = "LogopedController", description = "End points for logoped actions")
 public class LogopedController {
@@ -27,5 +27,12 @@ public class LogopedController {
         logopedService.activate(jwtActivateKey);
         return new ResponseEntity<>("Successful activate account.",
                 HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/{logopedId}")
+    @ApiGetLogopedInfo
+    public ResponseEntity<?> get(@PathVariable Long logopedId){
+        return new ResponseEntity<>(logopedService.getById(logopedId),
+                HttpStatus.OK);
     }
 }
