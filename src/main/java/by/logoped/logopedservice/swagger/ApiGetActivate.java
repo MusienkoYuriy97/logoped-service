@@ -14,11 +14,11 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Operation(summary = "Login in account")
+@Operation(summary = "Activate account")
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(example = "access_token:{jwt}"))),
-        @ApiResponse(responseCode = "400", description = "Fields entered incorrectly", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Wrong password/email or Account doesn't active", content = @Content)})
+        @ApiResponse(responseCode = "202", description = "ACCEPTED", content = @Content(mediaType = "application/json",schema = @Schema(example = "Successful activate account."))),
+        @ApiResponse(responseCode = "409", description = "Activate key is expired", content = @Content),
+        @ApiResponse(responseCode = "409", description = "Activate key doesn't exist", content = @Content)})
 @SecurityRequirements
-public @interface ApiPostLogin {
+public @interface ApiGetActivate {
 }

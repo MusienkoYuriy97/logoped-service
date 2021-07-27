@@ -3,7 +3,6 @@ package by.logoped.logopedservice.jwt;
 import by.logoped.logopedservice.exception.JwtAuthenticationException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

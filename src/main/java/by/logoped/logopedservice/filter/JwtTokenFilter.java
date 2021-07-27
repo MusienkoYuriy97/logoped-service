@@ -1,6 +1,8 @@
-package by.logoped.logopedservice.jwt;
+package by.logoped.logopedservice.filter;
 
 import by.logoped.logopedservice.exception.JwtAuthenticationException;
+import by.logoped.logopedservice.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -19,13 +21,9 @@ import java.io.IOException;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtTokenFilter extends GenericFilterBean {
     private final JwtTokenProvider jwtTokenProvider;
-
-    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {

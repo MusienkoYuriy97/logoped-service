@@ -1,8 +1,6 @@
 package by.logoped.logopedservice.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import by.logoped.logopedservice.jwt.ActivateKeyJwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +13,6 @@ import org.thymeleaf.context.Context;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,16 +20,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    @Value("${jwt.secret}")
-    private String secretKey;
     @Value("${root.path}")
     private String rootPath;
-    @Value("${jwt.claimSimpleKey}")
-    private String claimSimpleKey;
-    @Value("${jwt.claimIssuedAt}")
-    private String claimIssuedAt;
-    @Value("${jwt.claimExpiration}")
-    private String claimExpiration;
 
     public static final String EMAIL_VERIFICATION_TEMPLATE = "email";
 
@@ -44,12 +33,13 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final TemplateEngine templateEngine;
+    private final ActivateKeyJwtProvider activateKeyJwtProvider;
 
     public void sendEmail(String to, String fullName, String simpleKey){
         log.info("Send email to {} {} ", to, fullName);
         try {
             Map<String, Object> variables = new HashMap<>();
-            String jwtKey = toJwt(simpleKey);
+            String jwtKey = activateKeyJwtProvider.toJwt(simpleKey);
             String link = rootPath + jwtKey;
             variables.put(TEMPLATE_VARIABLE_NAME, fullName);
             variables.put(TEMPLATE_VARIABLE_LINK, link);
@@ -68,19 +58,6 @@ public class EmailService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-    }
-
-    public String toJwt(String simpleKey){
-        Claims claims = Jwts.claims().setSubject("activate key");
-        LocalDateTime issuedAt = LocalDateTime.now();
-        LocalDateTime expiration = issuedAt.plusHours(24);
-        claims.put(claimSimpleKey, simpleKey);
-        claims.put(claimIssuedAt, issuedAt.toString());
-        claims.put(claimExpiration, expiration.toString());
-        return Jwts.builder()
-                .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
     }
 
     private String buildTemplate(Map<String, Object> variables){
