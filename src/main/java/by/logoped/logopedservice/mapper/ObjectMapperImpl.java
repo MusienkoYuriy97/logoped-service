@@ -1,10 +1,9 @@
 package by.logoped.logopedservice.mapper;
 
-import by.logoped.logopedservice.dto.LogopedInfoResponse;
-import by.logoped.logopedservice.dto.RegistrationLogopedRequest;
-import by.logoped.logopedservice.dto.RegistrationUserRequest;
-import by.logoped.logopedservice.dto.RegistrationResponse;
-import by.logoped.logopedservice.entity.Category;
+import by.logoped.logopedservice.dto.response.LogopedInfoResponse;
+import by.logoped.logopedservice.dto.request.RegistrationLogopedRequest;
+import by.logoped.logopedservice.dto.request.RegistrationUserRequest;
+import by.logoped.logopedservice.dto.response.RegistrationResponse;
 import by.logoped.logopedservice.entity.Logoped;
 import by.logoped.logopedservice.entity.Role;
 import by.logoped.logopedservice.entity.User;
@@ -50,6 +49,8 @@ public class ObjectMapperImpl implements ObjectMapper {
         return Logoped
                 .builder()
                     .education(request.getEducation())
+                    .workPlace(request.getWorkPlace())
+                    .workExperience(request.getWorkExperience())
                 .build();
     }
 

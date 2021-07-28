@@ -27,6 +27,7 @@ public class JwtTokenFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        log.info("Check authorization filter");
         String bearerToken = jwtTokenProvider.resolveToken((HttpServletRequest) request);
 
 

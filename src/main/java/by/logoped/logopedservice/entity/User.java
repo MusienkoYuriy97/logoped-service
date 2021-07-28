@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,14 +17,11 @@ import static javax.persistence.EnumType.*;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
-
-@Schema(name = "User(Unuseful in Controller)")
 @Entity
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data @Builder
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "users")
+@Schema(name = "User(Unuseful in Controller)")
 public class User implements UserDetails {
     @Id
     @Column(name = "id", nullable = false)
@@ -59,6 +55,16 @@ public class User implements UserDetails {
     private UserStatus userStatus;
 
     @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "users_user_role",
+            joinColumns = @JoinColumn(
+                    name = "user_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "user_role_id",
+                    referencedColumnName = "id"
+            ))
     private Collection<Role> userRoles = new ArrayList<>();
 
     @Override

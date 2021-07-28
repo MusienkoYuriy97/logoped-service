@@ -1,12 +1,15 @@
-package by.logoped.logopedservice.dto;
+package by.logoped.logopedservice.dto.response;
 
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Setter
+@Data @Builder
+@AllArgsConstructor @NoArgsConstructor
 public class CustomErrorResponse {
     private String error;
+
     private int status;
+
     private LocalDateTime timestamp;
 }

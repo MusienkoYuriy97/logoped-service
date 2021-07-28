@@ -1,7 +1,6 @@
 package by.logoped.logopedservice.util;
 
 import org.springframework.stereotype.Component;
-
 import java.util.Set;
 
 @Component
@@ -13,9 +12,8 @@ public class WhiteList{
             "/configuration/ui",
             "/swagger-ui/**",
             apiPath + "/auth/login",
-            apiPath + "/logoped/activate/**",
             apiPath + "/auth/registration/**",
-            apiPath + "/token/refresh/**"
+            apiPath + "/logoped/activate/**"
     );
 
     public static String[] get(){

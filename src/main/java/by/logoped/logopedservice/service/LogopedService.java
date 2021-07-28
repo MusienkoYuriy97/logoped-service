@@ -1,14 +1,14 @@
 package by.logoped.logopedservice.service;
 
-import by.logoped.logopedservice.dto.LogopedInfoResponse;
+import by.logoped.logopedservice.dto.response.FormResponse;
 import by.logoped.logopedservice.entity.ActivateKey;
 import by.logoped.logopedservice.entity.Logoped;
 import by.logoped.logopedservice.entity.User;
 import by.logoped.logopedservice.exception.ActiveKeyNotValidException;
-import by.logoped.logopedservice.exception.UserDataException;
+import by.logoped.logopedservice.exception.UserNotFoundException;
 import by.logoped.logopedservice.jwt.ActivateKeyJwtProvider;
-import by.logoped.logopedservice.mapper.ObjectMapper;
 import by.logoped.logopedservice.repository.ActivateKeyRepository;
+import by.logoped.logopedservice.repository.FormRepository;
 import by.logoped.logopedservice.repository.LogopedRepository;
 import by.logoped.logopedservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,8 +28,6 @@ import static by.logoped.logopedservice.util.UserStatus.ACTIVE;
 @Service
 @RequiredArgsConstructor
 public class LogopedService {
-    @Value("${jwt.secret}")
-    private String secretKey;
     @Value("${jwt.claimSimpleKey}")
     private String claimSimpleKey;
     @Value("${jwt.claimExpiration}")
@@ -37,7 +37,8 @@ public class LogopedService {
     private final ActivateKeyRepository activateKeyRepository;
     private final ActivateKeyJwtProvider activateKeyJwtProvider;
     private final LogopedRepository logopedRepository;
-    private final ObjectMapper objectMapper;
+    private final FormRepository formRepository;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Transactional
     public void activate(String jwtActivateKey){
@@ -63,24 +64,33 @@ public class LogopedService {
     }
 
     private boolean isExpired(Object expiration) {
+        log.info("Check if activate key is expired");
         LocalDateTime expirationDate = LocalDateTime.parse(expiration.toString());
         return LocalDateTime.now().isAfter(expirationDate);
     }
 
     private ActivateKey getActivateKeyOrThrowException(String simpleKey) {
+        log.info("Get activate key from database");
         return activateKeyRepository.getBySimpleKey(simpleKey)
                 .orElseThrow(() -> new ActiveKeyNotValidException("Activate key doesn't exist"));
     }
 
-    public LogopedInfoResponse getById(Long logopedId) {
-        if (logopedId == null){
-            log.error("logoped id shouldn't be null");
-            throw new UserDataException("logoped id shouldn't be null");
-        }
-        Optional<Logoped> optionalLogoped = logopedRepository.findById(logopedId);
+    public List<FormResponse> getAllForm() {
+        log.info("Get all form requests for logoped");
+        final User currentUser = userDetailsService.getCurrentUser();
+        final Optional<Logoped> optionalLogoped = logopedRepository.findByUser(currentUser);
         if (optionalLogoped.isPresent()){
-            return objectMapper.toLogopedResponse(optionalLogoped.get());
+            List<FormResponse> formResponses = new ArrayList<>();
+            formRepository.findAllByLogoped(optionalLogoped.get()).forEach(form -> {
+                FormResponse response = new FormResponse();
+                response.setDescription(form.getDescription());
+                response.setPhoneNumber(form.getPhoneNumber());
+                formResponses.add(response);
+            });
+            return formResponses;
+        }else {
+            log.error("Logoped not found in database");
+            throw new UserNotFoundException("Logoped not found in database");
         }
-        throw new UserDataException("Logoped not found");
     }
 }

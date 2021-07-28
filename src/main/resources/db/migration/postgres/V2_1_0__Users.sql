@@ -7,3 +7,14 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR (255),
     user_status VARCHAR (255),
     PRIMARY KEY (id));
+
+
+INSERT INTO users (first_name, last_name, email, phone_number, password, user_status)
+VALUES (
+        'Юрий',
+        'Мусиенко',
+        '97musienko@gmail.com',
+        '+375298344491',
+        '$2y$12$QKQ2d03.6SCPEQhLlaZusOJT9Q/ODqnvFHT6JCdpqvxKeXHa7KviG',
+        'ACTIVE'
+       );

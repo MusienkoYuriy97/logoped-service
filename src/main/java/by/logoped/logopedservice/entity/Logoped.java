@@ -5,21 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-
 import java.util.Set;
 
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Schema(name = "Logoped(Unuseful in Controller)")
 @Entity
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data @Builder
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "logoped")
+@Schema(name = "Logoped(Unuseful in Controller)")
 public class Logoped {
     @Id
     @Column(name = "id", nullable = false)
@@ -28,10 +24,31 @@ public class Logoped {
     private Long id;
 
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
+
     @Column(name = "education", nullable = false)
+    @Schema(example = "БГТУ")
     private String education;
 
     @OneToMany(fetch = EAGER)
+    @JoinTable(
+            name = "logoped_category",
+            joinColumns = @JoinColumn(
+                    name = "logoped_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "category_id",
+                    referencedColumnName = "id"
+            ))
     private Set<Category> categories;
+
+    @Column(name = "work_place")
+    @Schema(example = "Детский сад № 1")
+    private String workPlace;
+
+    @Column(name = "work_experience")
+    @Schema(example = "4")
+    private int workExperience;
 }

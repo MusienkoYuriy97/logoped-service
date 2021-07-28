@@ -1,7 +1,8 @@
 package by.logoped.logopedservice.service;
 
 import by.logoped.logopedservice.entity.User;
-import by.logoped.logopedservice.exception.UserDataException;
+import by.logoped.logopedservice.exception.NoActivatedAccountException;
+import by.logoped.logopedservice.exception.UserNotFoundException;
 import by.logoped.logopedservice.repository.UserRepository;
 import by.logoped.logopedservice.util.UserStatus;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found in the database");
         }else if (UserStatus.BLOCKED.equals(optionalUser.get().getUserStatus())){
             log.error("User not active");
-            throw new RuntimeException("User not active");
+            throw new NoActivatedAccountException("User not active");
         }else {
             log.info("User found in the database: {}", email);
             User user = optionalUser.get();
@@ -67,6 +68,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return userRepository.findByEmail(currentUserEmail.get()).get();
         }
         log.error("User doesn't exist");
-        throw new UserDataException("User doesn't exist");
+        throw new UserNotFoundException("User doesn't exist");
     }
 }

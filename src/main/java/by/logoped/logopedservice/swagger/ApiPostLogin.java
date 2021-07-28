@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(example = "access_token:{jwt}"))),
         @ApiResponse(responseCode = "400", description = "Fields entered incorrectly", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Wrong password/email or Account doesn't active", content = @Content)})
+        @ApiResponse(responseCode = "403", description = "Wrong password/email", content = @Content)})
 @SecurityRequirements
 public @interface ApiPostLogin {
 }

@@ -2,18 +2,18 @@ package by.logoped.logopedservice.controller;
 
 import by.logoped.logopedservice.service.LogopedService;
 import by.logoped.logopedservice.swagger.ApiGetActivate;
-import by.logoped.logopedservice.swagger.ApiGetLogopedInfo;
+import by.logoped.logopedservice.swagger.ApiGetAllForm;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @RestController
 @RequestMapping(value = "${api.path}"+"/logoped")
 @RequiredArgsConstructor
@@ -29,10 +29,11 @@ public class LogopedController {
                 HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/{logopedId}")
-    @ApiGetLogopedInfo
-    public ResponseEntity<?> get(@PathVariable Long logopedId){
-        return new ResponseEntity<>(logopedService.getById(logopedId),
+    @GetMapping("/form/getall")
+    @PreAuthorize("hasRole('ROLE_LOGOPED')")
+    @ApiGetAllForm
+    public ResponseEntity<?> getAllForm(){
+        return new ResponseEntity<>(logopedService.getAllForm(),
                 HttpStatus.OK);
     }
 }

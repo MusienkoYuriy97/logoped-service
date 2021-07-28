@@ -17,8 +17,7 @@ import java.lang.annotation.Target;
 @Operation(summary = "Activate account")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "202", description = "ACCEPTED", content = @Content(mediaType = "application/json",schema = @Schema(example = "Successful activate account."))),
-        @ApiResponse(responseCode = "409", description = "Activate key is expired", content = @Content),
-        @ApiResponse(responseCode = "409", description = "Activate key doesn't exist", content = @Content)})
+        @ApiResponse(responseCode = "409", description = "Activate key not valid", content = @Content)})
 @SecurityRequirements
 public @interface ApiGetActivate {
 }

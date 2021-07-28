@@ -1,6 +1,6 @@
 package by.logoped.logopedservice.exception;
 
-import by.logoped.logopedservice.dto.CustomErrorResponse;
+import by.logoped.logopedservice.dto.response.CustomErrorResponse;
 import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -43,6 +43,11 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ResponseEntity<?> userNotFound(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(AuthenticationException.class)
     protected ResponseEntity<?> auth(Exception e) {
         return new ResponseEntity<>("Wrong email/password", HttpStatus.FORBIDDEN);
@@ -57,4 +62,9 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<?> noActivated(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
+
+//    @ExceptionHandler(Exception.class)
+//    protected ResponseEntity<?> ex(Exception e) {
+//        return new ResponseEntity<>("Try ro refresh page", HttpStatus.BAD_REQUEST);
+//    }
 }

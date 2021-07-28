@@ -1,6 +1,5 @@
-package by.logoped.logopedservice.dto;
+package by.logoped.logopedservice.dto.response;
 
-import by.logoped.logopedservice.entity.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-@Schema(description = "Response for registration")
-@Builder
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Schema(description = "Response for get info about logoped")
+@Data @Builder
+@AllArgsConstructor @NoArgsConstructor
 public class LogopedInfoResponse {
     @Schema(example = "Алина")
     private String firstName;

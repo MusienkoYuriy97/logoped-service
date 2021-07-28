@@ -1,4 +1,4 @@
-package by.logoped.logopedservice.dto;
+package by.logoped.logopedservice.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -9,16 +9,15 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Schema(description = "Object for login user in system")
-@Builder
-@Data
+@Schema(description = "Login user")
+@Data @Builder
 @AllArgsConstructor @NoArgsConstructor
 public class LoginUserRequest {
-    @Schema(example = "97musienko@gmail.com")
+    @Schema(example = "musienko@gmail.com")
     @NotNull @NotBlank
     private String email;
 
-    @Schema(example = "12345")
+    @Schema(example = "1111")
     @NotNull @NotBlank
     private String password;
 }
