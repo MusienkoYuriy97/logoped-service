@@ -27,6 +27,12 @@ public class LogopedInfoResponse {
     @Schema(example = "БГТУ")
     private String education;
 
+    @Schema(example = "Детский сад № 1")
+    private String workPlace;
+
+    @Schema(example = "4")
+    private int workExperience;
+
     @Schema(example = "Подготовка к школе")
     private Set<String> category;
 }

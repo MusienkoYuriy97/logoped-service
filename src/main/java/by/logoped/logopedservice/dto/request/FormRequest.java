@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class FormRequest {
     @Schema(example = "1")
-    @NotNull @NotBlank
+    @NotNull
     private Long logopedId;
 
     @Schema(example = "+375296213287")

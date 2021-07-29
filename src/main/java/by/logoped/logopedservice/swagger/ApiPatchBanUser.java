@@ -17,6 +17,7 @@ import java.lang.annotation.Target;
         @ApiResponse(responseCode = "200", description = "OK", content = @Content),
         @ApiResponse(responseCode = "400", description = "Fields entered incorrectly", content = @Content),
         @ApiResponse(responseCode = "404", description = "User not found", content = @Content),
+        @ApiResponse(responseCode = "409", description = "You cannot change status for yourself", content = @Content),
         @ApiResponse(responseCode = "403", description = "Unauthorized", content = @Content)
 })
 public @interface ApiPatchBanUser {

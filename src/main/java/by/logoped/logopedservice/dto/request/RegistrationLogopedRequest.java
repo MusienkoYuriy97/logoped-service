@@ -22,7 +22,7 @@ public class RegistrationLogopedRequest extends RegistrationUserRequest{
 
     @Schema(example = "Подготовка к школе")
     @NotNull
-    private Set<String> services;
+    private Set<String> categories;
 
     @Schema(example = "Детский сад № 1")
     @NotNull @NotBlank

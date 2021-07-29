@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
-import static by.logoped.logopedservice.test.UserConstant.USER_EMAIL;
+import static by.logoped.logopedservice.test.TestConstant.USER_EMAIL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -28,8 +28,8 @@ class UserDetailsServiceImplTest {
     @Test
     void loadUserByUsername() {
         //mock
-        when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(objectCreator.activeUser()));
-        User user = objectCreator.activeUser();
+        when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(objectCreator.user()));
+        User user = objectCreator.user();
         //call service
         UserDetails userDetails = userDetailsService.loadUserByUsername(USER_EMAIL);
         //assert
@@ -47,23 +47,22 @@ class UserDetailsServiceImplTest {
     @Test
     void getCurrentEmail() {
         //mock
-        when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(objectCreator.activeUser()));
-        objectCreator.buildSecurityContext();
+        when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(objectCreator.user()));
+        objectCreator.buildSecurityContextForUser();
         //call service
-        Optional<String> currentEmail = UserDetailsServiceImpl.getCurrentEmail();
+        String currentEmail = UserDetailsServiceImpl.getCurrentEmail();
         //assert
-        assertEquals(USER_EMAIL, currentEmail.get());
+        assertEquals(USER_EMAIL, currentEmail);
     }
 
     @Test
     void getCurrentUser() {
         //mock
-        when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(objectCreator.activeUser()));
-        when(userRepository.existsByEmail(USER_EMAIL)).thenReturn(true);
-        objectCreator.buildSecurityContext();
+        when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(objectCreator.user()));
+        objectCreator.buildSecurityContextForUser();
         //call service
-        User user = userDetailsService.getCurrentUser();
+        User currentUser = UserDetailsServiceImpl.getCurrentUser();
         //assert
-        assertEquals(USER_EMAIL, user.getEmail());
+        assertEquals(currentUser.getEmail(), USER_EMAIL);
     }
 }

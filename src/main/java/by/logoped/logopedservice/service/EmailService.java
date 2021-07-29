@@ -35,7 +35,7 @@ public class EmailService {
     private final TemplateEngine templateEngine;
     private final ActivateKeyJwtProvider activateKeyJwtProvider;
 
-    public void sendEmail(String to, String fullName, String simpleKey){
+    public void sendEmailActivate(String to, String fullName, String simpleKey){
         log.info("Send email to {} {} ", to, fullName);
         try {
             Map<String, Object> variables = new HashMap<>();

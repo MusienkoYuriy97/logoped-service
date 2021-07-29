@@ -25,7 +25,7 @@ public class UserService {
     private final FormRepository formRepository;
     private final ObjectMapper objectMapper;
 
-    public LogopedInfoResponse getById(Long logopedId) {
+    public LogopedInfoResponse findLogopedById(Long logopedId) {
         if (logopedId == null){
             log.error("logoped id shouldn't be null");
             throw new UserDataException("logoped id shouldn't be null");
@@ -37,7 +37,7 @@ public class UserService {
         throw new UserNotFoundException("Logoped not found");
     }
 
-    public List<LogopedInfoResponse> getAll() {
+    public List<LogopedInfoResponse> findAllLogoped() {
         log.info("Get all logoped for user");
         final List<Logoped> logopedList = logopedRepository.findAll();
         if (logopedList.isEmpty()){

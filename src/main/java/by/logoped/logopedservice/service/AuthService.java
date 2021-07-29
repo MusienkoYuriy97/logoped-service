@@ -61,12 +61,12 @@ public class AuthService {
         //save as logoped
         Logoped logoped = objectMapper.toLogoped(request);
         logoped.setUser(user);
-        logoped.setCategories(getCategorySetOrThrowException(request.getServices()));
+        logoped.setCategories(getCategorySetOrThrowException(request.getCategories()));
         logopedRepository.save(logoped);
 
         //send email
         String simpleKey = saveActivateKey(user.getEmail(), user);
-        emailService.sendEmail(user.getEmail(), user.getFirstName(), simpleKey);
+        emailService.sendEmailActivate(user.getEmail(), user.getFirstName(), simpleKey);
         return objectMapper.toUserResponse(user);
     }
 

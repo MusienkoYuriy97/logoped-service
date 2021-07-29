@@ -67,6 +67,8 @@ public class ObjectMapperImpl implements ObjectMapper {
                     .phoneNumber(logoped.getUser().getPhoneNumber())
                     .education(logoped.getEducation())
                     .category(categories)
+                    .workExperience(logoped.getWorkExperience())
+                    .workPlace(logoped.getWorkPlace())
                 .build();
     }
 }

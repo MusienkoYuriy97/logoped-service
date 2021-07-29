@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS logoped (
     work_place VARCHAR (255),
     work_experience INT,
     PRIMARY KEY (id),
-    foreign key (user_id) references users(id));
+    FOREIGN KEY (user_id) REFERENCES users(id));

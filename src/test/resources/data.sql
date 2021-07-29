@@ -8,6 +8,18 @@ VALUES (
            'ACTIVE'
        );
 
+INSERT INTO logoped (user_id, education, work_place, work_experience)
+VALUES (
+           1,
+           'БГПУ',
+           'Детский сад № 1',
+           4
+       );
+
+
+
+
+
 INSERT INTO user_role (role_name)
 VALUES (
            'ROLE_USER'
@@ -27,4 +39,9 @@ VALUES (
        (
            '1',
            (SELECT u.id FROM user_role as u  WHERE u.role_name='ROLE_ADMIN')
+       ),
+       (
+           '1',
+           (SELECT u.id FROM user_role as u  WHERE u.role_name='ROLE_LOGOPED')
        );
+

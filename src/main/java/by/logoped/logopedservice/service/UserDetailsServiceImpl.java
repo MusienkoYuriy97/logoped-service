@@ -2,11 +2,13 @@ package by.logoped.logopedservice.service;
 
 import by.logoped.logopedservice.entity.User;
 import by.logoped.logopedservice.exception.NoActivatedAccountException;
+import by.logoped.logopedservice.exception.UserDataException;
 import by.logoped.logopedservice.exception.UserNotFoundException;
 import by.logoped.logopedservice.repository.UserRepository;
 import by.logoped.logopedservice.util.UserStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,27 +49,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
     }
 
-    public static Optional<String> getCurrentEmail() {
+    public static String getCurrentEmail() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
-                .map(authentication -> {
-                    if (authentication.getPrincipal() instanceof UserDetails) {
-                        UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-                        return springSecurityUser.getUsername();
-                    } else if (authentication.getPrincipal() instanceof String) {
-                        return (String) authentication.getPrincipal();
-                    }
-                    return null;
-                });
+        Authentication authentication = securityContext.getAuthentication();
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+            return springSecurityUser.getUsername();
+        } else if (authentication.getPrincipal() instanceof String) {
+            return (String) authentication.getPrincipal();
+        }
+
+        throw new UserNotFoundException("User not found");
     }
 
-    public User getCurrentUser(){
-        log.info("Get current user from security context");
-        Optional<String> currentUserEmail = getCurrentEmail();
-        if (currentUserEmail.isPresent() & userRepository.existsByEmail(currentUserEmail.get())){
-            return userRepository.findByEmail(currentUserEmail.get()).get();
+    public static User getCurrentUser(){
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            return  (User) authentication.getPrincipal();
         }
-        log.error("User doesn't exist");
-        throw new UserNotFoundException("User doesn't exist");
+        throw new UserNotFoundException("User not found");
     }
 }

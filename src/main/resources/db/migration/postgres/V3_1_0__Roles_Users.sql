@@ -1,8 +1,9 @@
 CREATE TABLE IF NOT EXISTS users_user_role (
-    user_id int8 NOT NULL ,
-    user_role_id int8 not null,
-        foreign key (user_role_id) references user_role(id),
-        foreign key (user_id) references users(id));
+    user_id INT NOT NULL ,
+    user_role_id INT NOT NULL ,
+        FOREIGN KEY (user_role_id) REFERENCES user_role(id),
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        UNIQUE(user_id, user_role_id));
 
 INSERT INTO users_user_role (user_id, user_role_id)
 VALUES (

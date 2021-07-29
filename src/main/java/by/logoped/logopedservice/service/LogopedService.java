@@ -2,6 +2,7 @@ package by.logoped.logopedservice.service;
 
 import by.logoped.logopedservice.dto.response.FormResponse;
 import by.logoped.logopedservice.entity.ActivateKey;
+import by.logoped.logopedservice.entity.Form;
 import by.logoped.logopedservice.entity.Logoped;
 import by.logoped.logopedservice.entity.User;
 import by.logoped.logopedservice.exception.ActiveKeyNotValidException;
@@ -38,7 +39,6 @@ public class LogopedService {
     private final ActivateKeyJwtProvider activateKeyJwtProvider;
     private final LogopedRepository logopedRepository;
     private final FormRepository formRepository;
-    private final UserDetailsServiceImpl userDetailsService;
 
     @Transactional
     public void activate(String jwtActivateKey){
@@ -77,8 +77,8 @@ public class LogopedService {
 
     public List<FormResponse> getAllForm() {
         log.info("Get all form requests for logoped");
-        final User currentUser = userDetailsService.getCurrentUser();
-        final Optional<Logoped> optionalLogoped = logopedRepository.findByUser(currentUser);
+        User currentUser = UserDetailsServiceImpl.getCurrentUser();
+        Optional<Logoped> optionalLogoped = logopedRepository.findByUser(currentUser);
         if (optionalLogoped.isPresent()){
             List<FormResponse> formResponses = new ArrayList<>();
             formRepository.findAllByLogoped(optionalLogoped.get()).forEach(form -> {
@@ -88,6 +88,31 @@ public class LogopedService {
                 formResponses.add(response);
             });
             return formResponses;
+        }else {
+            log.error("Logoped not found in database");
+            throw new UserNotFoundException("Logoped not found in database");
+        }
+    }
+
+    //TODO
+    public FormResponse getForm(String userId) {
+        log.info("Get form requests for by id");
+        User currentUser = UserDetailsServiceImpl.getCurrentUser();
+        Optional<Logoped> optionalLogoped = logopedRepository.findByUser(currentUser);
+        if(optionalLogoped.isPresent()){
+            Optional<Form> optionalForm = formRepository.findByLogoped(optionalLogoped.get());
+            if (optionalForm.isPresent()){
+                FormResponse response = new FormResponse();
+                response.setDescription(optionalForm.get().getDescription());
+                response.setPhoneNumber(optionalForm.get().getPhoneNumber());
+                return FormResponse
+                        .builder()
+                            .description(optionalForm.get().getDescription())
+                            .phoneNumber(optionalForm.get().getPhoneNumber())
+                        .build();
+            }else {
+                throw new RuntimeException();
+            }
         }else {
             log.error("Logoped not found in database");
             throw new UserNotFoundException("Logoped not found in database");
