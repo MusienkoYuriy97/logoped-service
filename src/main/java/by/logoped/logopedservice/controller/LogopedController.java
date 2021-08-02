@@ -2,8 +2,7 @@ package by.logoped.logopedservice.controller;
 
 import by.logoped.logopedservice.dto.request.LessonCreateRequest;
 import by.logoped.logopedservice.service.LogopedService;
-import by.logoped.logopedservice.swagger.ApiGetActivate;
-import by.logoped.logopedservice.swagger.ApiGetAllForm;
+import by.logoped.logopedservice.swagger.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,6 +36,7 @@ public class LogopedController {
 
     @GetMapping("/form/get/{formId}")
     @PreAuthorize("hasRole('ROLE_LOGOPED')")
+    @ApiGetFormById
     public ResponseEntity<?> getForm(@PathVariable Long formId){
         return new ResponseEntity<>(logopedService.getForm(formId),
                 HttpStatus.OK);
@@ -44,14 +44,15 @@ public class LogopedController {
 
     @DeleteMapping("/form/delete/{formId}")
     @PreAuthorize("hasRole('ROLE_LOGOPED')")
+    @ApiDeleteFormById
     public ResponseEntity<?> deleteForm(@PathVariable Long formId){
         logopedService.deleteForm(formId);
-        return new ResponseEntity<>(
-                HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/file/upload")
     @PreAuthorize("hasRole('ROLE_LOGOPED')")
+    @ApiPostFileUpload
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile multipartFile){
         logopedService.uploadFile(multipartFile);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -59,6 +60,7 @@ public class LogopedController {
 
     @PostMapping("/file/upload/{userId}")
     @PreAuthorize("hasRole('ROLE_LOGOPED')")
+    @ApiPostSendFileToClient
     public ResponseEntity<?> sendFileToClient(@RequestParam("file") MultipartFile multipartFile, @PathVariable Long userId){
         logopedService.uploadFile(multipartFile, userId);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -66,6 +68,7 @@ public class LogopedController {
 
     @GetMapping("/file/getall")
     @PreAuthorize("hasRole('ROLE_LOGOPED')")
+    @ApiGetAllFiles
     public ResponseEntity<?> getAllFiles(){
         return new ResponseEntity<>(logopedService.getAllFiles(),
                 HttpStatus.OK);
@@ -73,6 +76,7 @@ public class LogopedController {
 
     @PostMapping("/lesson/create")
     @PreAuthorize("hasRole('ROLE_LOGOPED')")
+    @ApiPostCreateLesson
     public ResponseEntity<?> createLesson(@RequestBody LessonCreateRequest request){
         logopedService.createLesson(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -80,8 +84,8 @@ public class LogopedController {
 
     @GetMapping("/lesson/getall")
     @PreAuthorize("hasRole('ROLE_LOGOPED')")
+    @ApiGetAllLesson
     public ResponseEntity<?> getAllLesson(){
-
         return new ResponseEntity<>(logopedService.getAllLesson(),
                 HttpStatus.OK);
     }

@@ -9,6 +9,8 @@ services:
       - db
     env_file:
       - service.env
+    volumes:
+      - D:\logoped-service\:/logoped-service
   db:
     image: 'postgres'
     env_file:

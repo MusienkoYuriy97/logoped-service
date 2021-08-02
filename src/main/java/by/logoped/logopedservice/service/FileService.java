@@ -42,7 +42,8 @@ public class FileService {
                     .build();
         } catch (Exception e) {
             log.error("System error to load file");
-            throw new RuntimeException("System error please try again");
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
     }
 

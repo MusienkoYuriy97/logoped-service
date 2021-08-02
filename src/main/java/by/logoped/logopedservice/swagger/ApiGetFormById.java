@@ -14,9 +14,10 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Operation(summary = "Get all form requests")
+@Operation(summary = "Get form requests by id")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(implementation = FormResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Form not found", content = @Content),
         @ApiResponse(responseCode = "403", description = "Unauthorized", content = @Content)})
-public @interface ApiGetAllForm {
+public @interface ApiGetFormById {
 }

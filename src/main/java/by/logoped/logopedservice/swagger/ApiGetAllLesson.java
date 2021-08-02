@@ -1,6 +1,6 @@
 package by.logoped.logopedservice.swagger;
 
-import by.logoped.logopedservice.dto.response.FormResponse;
+import by.logoped.logopedservice.dto.response.LessonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,9 +14,9 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Operation(summary = "Get all form requests")
+@Operation(summary = "Get all lesson")
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(implementation = FormResponse.class))),
+        @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(implementation = LessonResponse.class))),
         @ApiResponse(responseCode = "403", description = "Unauthorized", content = @Content)})
-public @interface ApiGetAllForm {
+public @interface ApiGetAllLesson {
 }

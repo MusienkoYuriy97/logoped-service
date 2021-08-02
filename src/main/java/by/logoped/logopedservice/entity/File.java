@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Table(name = "file")
-@Schema(name = "File")
+@Schema(name = "File(Unuseful in Controller)")
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -63,8 +63,13 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
-//    @ExceptionHandler(Exception.class)
-//    protected ResponseEntity<?> ex(Exception e) {
-//        return new ResponseEntity<>("Try ro refresh page", HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(FormNotFoundException.class)
+    protected ResponseEntity<?> formNotfound(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<?> ex(Exception e) {
+        return new ResponseEntity<>("Try ro refresh page", HttpStatus.BAD_REQUEST);
+    }
 }

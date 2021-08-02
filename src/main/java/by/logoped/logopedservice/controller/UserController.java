@@ -2,9 +2,7 @@ package by.logoped.logopedservice.controller;
 
 import by.logoped.logopedservice.dto.request.FormRequest;
 import by.logoped.logopedservice.service.UserService;
-import by.logoped.logopedservice.swagger.ApiGetAllLogopedInfo;
-import by.logoped.logopedservice.swagger.ApiGetLogopedInfo;
-import by.logoped.logopedservice.swagger.ApiPostSendForm;
+import by.logoped.logopedservice.swagger.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,12 +41,14 @@ public class UserController {
     }
 
     @GetMapping("/file/getall")
+    @ApiGetAllFiles
     public ResponseEntity<?> getAllFiles(){
         return new ResponseEntity<>(userService.getAllFiles(),
                 HttpStatus.OK);
     }
 
     @GetMapping("/lesson/getall")
+    @ApiGetAllLesson
     public ResponseEntity<?> getAllLesson(){
         return new ResponseEntity<>(userService.getAllLesson(),
                 HttpStatus.OK);
