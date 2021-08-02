@@ -1,6 +1,7 @@
 package by.logoped.logopedservice.entity;
 
 import by.logoped.logopedservice.util.UserStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -69,6 +70,7 @@ public class User implements UserDetails {
 
     @Override
     @Schema(hidden = true)
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -80,28 +82,33 @@ public class User implements UserDetails {
 
     @Override
     @Schema(hidden = true)
+    @JsonIgnore
     public String getUsername() {
         return getEmail();
     }
 
     @Override
     @Schema(hidden = true)
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return UserStatus.ACTIVE.equals(userStatus);    }
 
     @Override
     @Schema(hidden = true)
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return UserStatus.ACTIVE.equals(userStatus);    }
 
     @Override
     @Schema(hidden = true)
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return UserStatus.ACTIVE.equals(userStatus);
     }
 
     @Override
     @Schema(hidden = true)
+    @JsonIgnore
     public boolean isEnabled() {
         return UserStatus.ACTIVE.equals(userStatus);
     }

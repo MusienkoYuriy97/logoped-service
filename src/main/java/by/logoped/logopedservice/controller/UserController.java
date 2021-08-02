@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,5 +40,17 @@ public class UserController {
     public ResponseEntity<?> sendFormToLogoped(@Valid @RequestBody FormRequest request){
         userService.addFormRequest(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/file/getall")
+    public ResponseEntity<?> getAllFiles(){
+        return new ResponseEntity<>(userService.getAllFiles(),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/lesson/getall")
+    public ResponseEntity<?> getAllLesson(){
+        return new ResponseEntity<>(userService.getAllLesson(),
+                HttpStatus.OK);
     }
 }
